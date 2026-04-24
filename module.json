@@ -1,0 +1,17 @@
+﻿{
+  "id": "fortnite",
+  "name": "Fortnite",
+  "version": "1.0.0",
+  "entrypoint": "cog",
+  "description": "Fortnite stats, profile linking, and map module for R4Bot.",
+  "author": "Rarmash",
+  "min_core_version": "2.0",
+  "required_settings": [
+    "accent_color"
+  ],
+  "required_services": [
+    "config",
+    "firebase",
+    "secrets"
+  ]
+}
