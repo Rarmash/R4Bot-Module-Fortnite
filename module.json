@@ -12,6 +12,7 @@
   "required_services": [
     "config",
     "firebase",
-    "secrets"
+    "secrets",
+    "profile_extensions"
   ]
 }
