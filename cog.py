@@ -87,7 +87,7 @@ class Fortnite(commands.Cog):
             guide_files = [discord.File(f'resources/fortnite/fortnitestatsguide{i}.png') for i in range(1, 4)]
             await ctx.respond(
                 f'❗ Данные игрока **{username}** скрыты (ошибка **{status}**).\n'
-                'Если это ваш аккаунт, откройте статистику в настройках игры.',
+                'Если это Ваш аккаунт, откройте статистику в настройках игры.',
                 files=guide_files,
             )
             return
@@ -175,15 +175,15 @@ class Fortnite(commands.Cog):
             return
         if status != 200 or not user_id:
             await ctx.respond(
-                f'При добавлении возникла ошибка **{status}**.\nВозможно, вы неверно указали никнейм.'
+                f'При добавлении возникла ошибка **{status}**.\nВозможно, Вы неверно указали никнейм.'
             )
             return
 
         self.services.firebase.update_record(str(ctx.guild.id), 'Users', author_id, {'fortnite': user_id})
         embed = discord.Embed(
             description=(
-                f'Аккаунт **{username}** был успешно привязан к вашей учётной записи!\n'
-                'Если вы измените никнейм, здесь его менять не будет нужно.'
+                f'Аккаунт **{username}** был успешно привязан к Вашей учётной записи!\n'
+                'Если Вы измените никнейм, здесь его менять не будет нужно.'
             ),
             color=int(server_data.get('accent_color'), 16),
         )
