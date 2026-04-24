@@ -7,6 +7,7 @@ FORTNITE_API_BASE = 'https://fortnite-api.com'
 CONFIG_NOT_INITIALIZED_MESSAGE = (
     'Сервер ещё не настроен. Владелец сервера может выполнить `/service initserver`.'
 )
+MODULE_ID = 'fortnite'
 
 
 class Fortnite(commands.Cog):
@@ -18,13 +19,19 @@ class Fortnite(commands.Cog):
         if self.services is None:
             raise RuntimeError('R4Bot runtime services are not available on bot.r4_services')
 
-        self.api_key = self.services.secrets.get('fortnite', 'api_key')
+        self.api_key = self.services.secrets.get(MODULE_ID, 'api_key')
         if not self.api_key:
             raise RuntimeError('Fortnite API key is not configured. Use config/secrets/fortnite.json')
         self.headers = {'Authorization': self.api_key}
 
     def get_server_data(self, guild_id: int):
         return self.services.config.get_servers_data().get(str(guild_id))
+
+    def get_guide_files(self) -> list[discord.File]:
+        return [
+            discord.File(self.services.resources.get_resource_path(MODULE_ID, f'fortnitestatsguide{i}.png'))
+            for i in range(1, 4)
+        ]
 
     def fortnite_api_request(self, endpoint, **params):
         response = requests.get(
@@ -84,11 +91,10 @@ class Fortnite(commands.Cog):
             stats_data, status = self.fortnite_api_request_by_username(username)
 
         if status == 403:
-            guide_files = [discord.File(f'resources/fortnite/fortnitestatsguide{i}.png') for i in range(1, 4)]
             await ctx.respond(
                 f'❗ Данные игрока **{username}** скрыты (ошибка **{status}**).\n'
                 'Если это Ваш аккаунт, откройте статистику в настройках игры.',
-                files=guide_files,
+                files=self.get_guide_files(),
             )
             return
         if status == 404:
@@ -188,6 +194,7 @@ class Fortnite(commands.Cog):
             color=int(server_data.get('accent_color'), 16),
         )
         await ctx.respond(embed=embed)
+
 
 
 def setup(bot):
