@@ -8,7 +8,12 @@
 - добавляет `/fortnite map`
 - привязывает Fortnite-профиль к Discord-учётной записи
 - показывает статистику и карту Fortnite
+- если установлен модуль `profile`, добавляет в него поле Fortnite-профиля
 - использует runtime services из `bot.r4_services`
+
+## Интеграции
+- модуль может зарегистрировать profile-provider для `/profile`
+- если `profile` не установлен, это не считается ошибкой и Fortnite-модуль продолжает работать сам по себе
 
 ## Секреты
 API-ключ Fortnite хранится в:
@@ -33,7 +38,8 @@ config/secrets/fortnite.json
 
 ## Структура
 - `module.json` — метаданные модуля
-- `cog.py` — Discord cog
+- `cog.py` — команды Fortnite и основное поведение модуля
+- `service.py` — регистрация Fortnite-поля для модуля профиля
 - `fortnite.secrets.example.json` — пример файла секретов
 - `requirements.txt` — зависимости для IDE и локальной проверки
 

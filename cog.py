@@ -2,6 +2,7 @@
 import requests
 from discord.commands import SlashCommandGroup
 from discord.ext import commands
+from .service import FortniteService
 
 FORTNITE_API_BASE = 'https://fortnite-api.com'
 CONFIG_NOT_INITIALIZED_MESSAGE = (
@@ -23,10 +24,11 @@ class Fortnite(commands.Cog):
         if not self.api_key:
             raise RuntimeError('Fortnite API key is not configured. Use config/secrets/fortnite.json')
         self.headers = {'Authorization': self.api_key}
-        self.services.profile_extensions.register_provider(MODULE_ID, self.build_profile_fields)
+        self.service = FortniteService(self)
+        self.service.register_hooks()
 
     def cog_unload(self):
-        self.services.profile_extensions.unregister_provider(MODULE_ID)
+        self.service.unregister_hooks()
 
     def get_server_data(self, guild_id: int):
         return self.services.config.get_servers_data().get(str(guild_id))
@@ -69,14 +71,6 @@ class Fortnite(commands.Cog):
     def get_fortnite_username_to_profile(self, account_id):
         data, _ = self.fortnite_api_request_by_id(account_id)
         return (data or {}).get('account', {}).get('name')
-
-    def build_profile_fields(self, ctx, member, user_data, server_data):
-        account_id = user_data.get('fortnite')
-        if not account_id:
-            return []
-
-        nickname = self.get_fortnite_username_to_profile(account_id) or str(account_id)
-        return [{'name': 'Профиль Fortnite', 'value': nickname}]
 
     @fortnite.command(description='Посмотреть статистику по игроку')
     @discord.option('username', description='Имя игрока', required=False)
