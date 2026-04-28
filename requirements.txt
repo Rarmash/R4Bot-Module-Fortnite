@@ -1,2 +1,3 @@
-﻿py-cord @ git+https://github.com/Pycord-Development/pycord.git
+py-cord @ git+https://github.com/Pycord-Development/pycord.git
 requests>=2.32.0
+r4bot-sdk @ git+https://github.com/Rarmash/R4Bot-SDK.git@master
